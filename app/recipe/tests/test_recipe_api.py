@@ -12,10 +12,18 @@ from rest_framework.test import APIClient
 
 from core.models import Recipe
 
-from recipe.serializer import RecipeSerializer
+from recipe.serializers import (
+    RecipeSerializer,
+    RecipeDetailSerializer
+)
 
 
-RECIPES_URL = reverse('recipe:recipe-list')
+RECIPES_URL = reverse('recipes:recipe-list')
+
+
+def detail_url(recipe_id):
+    """Create and return a recipe detail URL."""
+    return reverse("recipe:recipe-detail", args=[recipe_id])
 
 
 def create_recipe(user, **params):
@@ -34,13 +42,13 @@ def create_recipe(user, **params):
 
 
 class PublicRecipeAPITests(TestCase):
-    """Test unauthemticated API requests."""
+    """Test unauthenticated API requests."""
 
     def setUp(self):
         self.client = APIClient()
 
     def test_auth_required(self):
-        """Test auth is required tp call API."""
+        """Test auth is required to call API."""
         res = self.client.get(RECIPES_URL)
 
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
