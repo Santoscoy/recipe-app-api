@@ -348,3 +348,37 @@ class PrivateRecipeAPITest(TestCase):
                 user=self.user
             ).exists()
             self.assertTrue(exists)
+
+    def test_create_ingredient_on_update(self):
+        """Test creating a new ingredient when updating a recipe."""
+        recipe = create_recipe(user=self.user)
+
+        payload = {"ingredients": [{"name": "Ingredient 1"}]}
+        url = detail_url(recipe.id)
+        res = self.client.patch(url, payload, format="json")
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        new_ingredient = Ingredient.objects.get(
+            user=self.user,
+            name="Ingredient 1"
+        )
+        self.assertIn(new_ingredient, recipe.ingredients.all())
+
+    def test_update_recipe_add_existing_ingredients(self):
+        """Test assigning an existing ingredient when update a recipe."""
+        original_ingredient = Ingredient.objects.create(
+            user=self.user, name="original_ingredient"
+        )
+        recipe = create_recipe(user=self.user)
+        recipe.ingredients.add(original_ingredient)
+
+        existing_ingredient = Ingredient.objects.create(
+            user=self.user, name="existing_ingredient"
+        )
+        payload = {"ingredients": [{"name": "existing_ingredient"}]}
+        url = detail_url(recipe.id)
+        res = self.client.patch(url, payload, format="json")
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertIn(existing_ingredient, recipe.ingredients.all())
+        self.assertNotIn(original_ingredient, recipe.ingredients.all())
