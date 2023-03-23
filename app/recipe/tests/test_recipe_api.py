@@ -385,7 +385,9 @@ class PrivateRecipeAPITest(TestCase):
 
     def test_clear_recipe_ingredients(self):
         """Test clearing a recipe ingredients."""
-        ingredient = Ingredient.objects.create(user=self.user, name="ingredient 1")
+        ingredient = Ingredient.objects.create(
+            user=self.user, name="ingredient 1"
+        )
         recipe = create_recipe(user=self.user)
         recipe.ingredients.add(ingredient)
 
