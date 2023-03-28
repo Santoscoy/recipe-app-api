@@ -113,7 +113,7 @@ class PrivateIngredientsAPITest(TestCase):
         recipe = Recipe.objects.create(
             title="Simple Title Test",
             time_minutes=5,
-            pirce=Decimal("4.22"),
+            price=Decimal("4.22"),
             user=self.user,
         )
         recipe.ingredients.add(in1)
@@ -132,13 +132,13 @@ class PrivateIngredientsAPITest(TestCase):
         r1 = Recipe.objects.create(
             title="Simple Title Test 1",
             time_minutes=5,
-            pirce=Decimal("4.22"),
+            price=Decimal("4.22"),
             user=self.user,
         )
         r2 = Recipe.objects.create(
             title="Simple Title Test 2",
             time_minutes=10,
-            pirce=Decimal("4.32"),
+            price=Decimal("4.32"),
             user=self.user,
         )
         r1.ingredients.add(ing)
